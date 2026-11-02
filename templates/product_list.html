@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Online Shop</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f8f9fa; color: #333; }
+
+    /* ჰედერი */
+    .navbar {
+      background-color: #212529;
+      color: white;
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+    }
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .cart-btn {
+      background: #343a40;
+      border: 1px solid #495057;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .user-greeting {
+      font-size: 14px;
+      color: #f8f9fa;
+    }
+    .btn-auth {
+      padding: 7px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .btn-login { background-color: #007bff; color: white; }
+    .btn-register { background-color: #28a745; color: white; }
+    .btn-logout { background-color: #dc3545; color: white; }
+
+    /* ძებნა */
+    .search-section {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 20px;
+    }
+    .search-form {
+      display: flex;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      overflow: hidden;
+      border: 1px solid #dee2e6;
+    }
+    .search-input {
+      flex: 1;
+      border: none;
+      padding: 14px 20px;
+      font-size: 15px;
+      outline: none;
+    }
+    .search-btn {
+      background: #212529;
+      color: white;
+      border: none;
+      padding: 0 25px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* განლაგება */
+    .main-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 30px;
+      padding: 0 20px 40px;
+    }
+    .sidebar {
+      width: 250px;
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      border: 1px solid #e9ecef;
+      height: fit-content;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .sidebar h4 {
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .filter-item {
+      margin-bottom: 15px;
+    }
+    .filter-item label {
+      display: block;
+      font-size: 13px;
+      color: #6c757d;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .filter-item select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      outline: none;
+    }
+    .filter-btn {
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+    .reset-btn {
+      width: 100%;
+      background: white;
+      color: #495057;
+      border: 1px solid #ced4da;
+      padding: 9px;
+      border-radius: 6px;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* ქარდები */
+    .products-container {
+      flex: 1;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 22px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    }
+    .product-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+    .product-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #212529;
+      margin-bottom: 6px;
+    }
+    .product-rating {
+      color: #ffc107;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .product-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 14px;
+    }
+    .add-cart-btn {
+      background: #212529;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .add-cart-btn:hover {
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ჰედერი -->
+  <header class="navbar">
+    <a href="/" class="logo">🛍️ Online Shop</a>
+
+    <div class="navbar-right">
+      <a href="{% url 'cart' %}" class="cart-btn">🛒 კალათა ({{ cart_count }})</a>
+
+      {% if user.is_authenticated %}
+        <span class="user-greeting">👤 გამარჯობა, <strong>{{ user.username }}</strong></span>
+        <a href="{% url 'logout' %}" class="btn-auth btn-logout">გასვლა</a>
+      {% else %}
+        <a href="{% url 'login' %}" class="btn-auth btn-login">შესვლა</a>
+        <a href="{% url 'register' %}" class="btn-auth btn-register">რეგისტრაცია</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <!-- ძებნა -->
+  <div class="search-section">
+    <form method="GET" action="/" class="search-form">
+      <input type="text" name="q" value="{{ query }}" class="search-input" placeholder="მოძებნე ნივთი სახელწოდებით...">
+      <button type="submit" class="search-btn">🔍 ძებნა</button>
+    </form>
+  </div>
+
+  <!-- მთავარი სივრცე -->
+  <div class="main-layout">
+    
+    <!-- საიდბარი -->
+    <aside class="sidebar">
+      <h4>▼ ფილტრაცია</h4>
+      <form method="GET" action="/">
+        
+        <div class="filter-item">
+          <label>კატეგორია</label>
+          <select name="category">
+            <option value="all">ყველა კატეგორია</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label>მინიმალური რეიტინგი</label>
+          <select name="rating">
+            <option value="all">ნებისმიერი</option>
+            <option value="4" {% if selected_rating == '4' %}selected{% endif %}>⭐ 4 და მეტი</option>
+            <option value="4.5" {% if selected_rating == '4.5' %}selected{% endif %}>⭐ 4.5 და მეტი</option>
+            <option value="5" {% if selected_rating == '5' %}selected{% endif %}>⭐ 5.0</option>
+          </select>
+        </div>
+
+        <button type="submit" class="filter-btn">გაფილტვრა</button>
+        <a href="/" class="reset-btn">გასუფთავება</a>
+      </form>
+    </aside>
+
+    <!-- პროდუქტები -->
+    <section class="products-container">
+      <div class="products-grid">
+        {% for product in products %}
+          <div class="product-card">
+            {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-img">
+            {% else %}
+              <img src="https://placehold.co/220x220?text=No+Photo" class="product-img">
+            {% endif %}
+
+            <a href="{% url 'product_detail' product.pk %}" class="product-title" style="text-decoration: none; display: block;">{{ product.title }}</a>
+            <div class="product-rating">⭐ {{ product.rating }}</div>
+            <div class="product-price">${{ product.price }}</div>
+            <a href="{% url 'add_to_cart' product.pk %}" class="add-cart-btn" style="text-decoration: none;">🛒 კალათაში დამატება</a>
+          </div>
+        {% empty %}
+          <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888;">
+            პროდუქტი ვერ მოიძებნა.
+          </p>
+        {% endfor %}
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

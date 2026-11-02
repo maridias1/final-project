@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <title>შესვლა</title>
+  <style>
+    body { font-family: sans-serif; background: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 320px; }
+    h2 { margin-bottom: 20px; text-align: center; }
+    input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+    button { width: 100%; background: #007bff; color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    p { text-align: center; margin-top: 15px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>🔑 შესვლა</h2>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">შესვლა</button>
+    </form>
+    <p>არ გაქვთ ანგარიში? <a href="{% url 'register' %}">დარეგისტრირდით</a></p>
+  </div>
+</body>
+</html>

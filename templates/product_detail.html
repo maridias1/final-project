@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ product.title }} - დეტალები</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+    body { background-color: #f8f9fa; color: #333; }
+    .navbar { background-color: #212529; color: white; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
+    .navbar a { color: white; text-decoration: none; font-weight: bold; }
+    .cart-btn { background: #343a40; border: 1px solid #495057; padding: 8px 14px; border-radius: 6px; }
+
+    .container { max-width: 1000px; margin: 30px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; font-weight: 600; }
+    
+    .top-section { display: flex; gap: 40px; margin-bottom: 30px; }
+    .img-box { flex: 1; text-align: center; }
+    .img-box img { max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; }
+    
+    .info-box { flex: 1.2; display: flex; flex-direction: column; justify-content: center; }
+    .info-box h1 { font-size: 24px; margin-bottom: 12px; }
+    .row { margin-bottom: 10px; font-size: 15px; color: #555; }
+    .price { font-size: 26px; font-weight: bold; color: #28a745; margin: 15px 0; }
+    
+    .actions { display: flex; gap: 15px; margin-top: 15px; }
+    .btn-add { background: #212529; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+    .btn-rate { background: #ffc107; color: #212529; padding: 12px 24px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
+
+    /* ტაბები (Details და Review) */
+    .tabs-header { display: flex; border-bottom: 2px solid #dee2e6; margin-top: 30px; }
+    .tab-btn { padding: 12px 24px; background: none; border: none; font-size: 16px; font-weight: bold; color: #6c757d; cursor: pointer; }
+    .tab-btn.active { color: #007bff; border-bottom: 3px solid #007bff; }
+    .tab-content { padding: 20px 0; display: none; line-height: 1.6; }
+    .tab-content.active { display: block; }
+
+    .review-card { background: #f8f9fa; border: 1px solid #e9ecef; padding: 14px; border-radius: 8px; margin-bottom: 12px; }
+    .review-author { font-weight: bold; margin-bottom: 4px; display: flex; justify-content: space-between; }
+
+    /* მოდალური ფანჯარა */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+    .modal-content { background: white; padding: 25px; border-radius: 10px; width: 360px; position: relative; }
+    .modal-content input, .modal-content textarea, .modal-content select { width: 100%; padding: 9px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 6px; }
+    .btn-submit { width: 100%; background: #007bff; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="/" class="logo">🛍️ Online Shop</a>
+    <a href="{% url 'cart' %}" class="cart-btn">🛒 კალათა ({{ cart_count }})</a>
+  </header>
+
+  <div class="container">
+    <a href="/" class="back-link">← უკან დაბრუნება</a>
+
+    <div class="top-section">
+      <div class="img-box">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% endif %}
+      </div>
+
+      <div class="info-box">
+        <h1>{{ product.title }}</h1>
+        <div class="row"><strong>ბრენდი:</strong> {{ product.brand }}</div>
+        <div class="row"><strong>გამოშვების თარიღი:</strong> {{ product.issue_date }}</div>
+        <div class="row"><strong>საწყობში დარჩენილი რაოდენობა:</strong> {{ product.stock }} ცალი</div>
+        <div class="row"><strong>რეიტინგი:</strong> ⭐ {{ product.rating }}</div>
+        <div class="price">${{ product.price }}</div>
+
+        <div class="actions">
+          <a href="{% url 'add_to_cart' product.pk %}" class="btn-add">🛒 კალათაში დამატება</a>
+          <button class="btn-rate" onclick="openModal()">⭐ შეფასება</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ტაბები: Details და Review -->
+    <div class="tabs-header">
+      <button class="tab-btn active" onclick="switchTab('details')">Details (აღწერა)</button>
+      <button class="tab-btn" onclick="switchTab('review')">Review (შეფასებები - {{ reviews.count }})</button>
+    </div>
+
+    <div id="detailsTab" class="tab-content active">
+      <h3>პროდუქტის დეტალური ინფორმაცია:</h3>
+      <p style="margin-top: 10px;">{{ product.description }}</p>
+    </div>
+
+    <div id="reviewTab" class="tab-content">
+      {% for r in reviews %}
+        <div class="review-card">
+          <div class="review-author">
+            <span>👤 {{ r.name }}</span>
+            <span style="color: #f39c12;">⭐ {{ r.rating }}</span>
+          </div>
+          <p>{{ r.comment }}</p>
+        </div>
+      {% empty %}
+        <p>შეფასება ჯერ არ არის დაწერილი. დააჭირეთ „შეფასებას“ და იყავით პირველი!</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- შეფასების მოდალი -->
+  <div class="modal" id="rateModal">
+    <div class="modal-content">
+      <span style="position: absolute; right: 15px; top: 12px; cursor: pointer; font-size: 20px;" onclick="closeModal()">&times;</span>
+      <h3 style="margin-bottom: 15px;">⭐ შეაფასეთ ნივთი</h3>
+      <form method="POST">
+        {% csrf_token %}
+        <label>სახელი და გვარი:</label>
+        <input type="text" name="name" required placeholder="მაგ: გიორგი ბერიძე" value="{% if user.is_authenticated %}{{ user.username }}{% endif %}">
+        
+        <label>რეიტინგი:</label>
+        <select name="rating">
+          <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+          <option value="4">⭐⭐⭐⭐ (4)</option>
+          <option value="3">⭐⭐⭐ (3)</option>
+          <option value="2">⭐⭐ (2)</option>
+          <option value="1">⭐ (1)</option>
+        </select>
+
+        <label>ტექსტური შეფასება:</label>
+        <textarea name="comment" rows="3" placeholder="დაწერეთ თქვენი აზრი..."></textarea>
+
+        <button type="submit" class="btn-submit">OK</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      if(tab === 'details') {
+        event.target.classList.add('active');
+        document.getElementById('detailsTab').classList.add('active');
+      } else {
+        event.target.classList.add('active');
+        document.getElementById('reviewTab').classList.add('active');
+      }
+    }
+    function openModal() { document.getElementById('rateModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('rateModal').style.display = 'none'; }
+  </script>
+
+</body>
+</html>
