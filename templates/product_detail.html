@@ -56,7 +56,7 @@
     <div class="top-section">
       <div class="img-box">
         {% if product.image %}
-          <img src="{{ product.image.url }}" alt="{{ product.title }}">
+<img src="{{ product.image.url }}" alt="{{ product.title }}" style="cursor: pointer;" onclick="openImageModal(this)">
         {% endif %}
       </div>
 
@@ -143,6 +143,128 @@
     function openModal() { document.getElementById('rateModal').style.display = 'flex'; }
     function closeModal() { document.getElementById('rateModal').style.display = 'none'; }
   </script>
+<!-- გასადიდებელი მოდალი -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
 
+<style>
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  padding-top: 50px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  max-width: 85%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 8px;
+  animation: zoomIn 0.25s ease-in-out;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 38px;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+
+<style>
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.modal-content {
+  max-width: 80vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 8px;
+  transform-origin: center center;
+  user-select: none;
+}
+
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 38px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10000;
+}
+</style>
+<script>
+let currentScale = 1;
+
+function openImageModal(element) {
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImg");
+  
+  currentScale = 1;
+  modalImg.style.transform = `scale(${currentScale})`;
+  
+  modal.style.display = "flex";
+  modalImg.src = element.src;
+}
+
+function closeImageModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+
+document.getElementById("imageModal").addEventListener("wheel", function(event) {
+  event.preventDefault();
+
+  const modalImg = document.getElementById("modalImg");
+
+  if (event.deltaY < 0) {
+    currentScale += 0.15;
+  } else {
+    currentScale -= 0.15;
+  }
+
+  currentScale = Math.min(Math.max(0.8, currentScale), 4);
+
+  modalImg.style.transform = `scale(${currentScale})`;
+  modalImg.style.transition = "transform 0.1s ease-out";
+}, { passive: false });
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeImageModal();
+  }
+});
+</script>
 </body>
-</html>
+</html> 
