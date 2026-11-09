@@ -3,29 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>კალათა - Online Shop</title>
+  
   <style>
+    /* საერთო სტილები: გლობალური განულება და ფონტი */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background-color: #f8f9fa; color: #333; }
+    
+    /* ჰედერის (ნავიგაციის) სტილები */
     .navbar { background-color: #212529; color: white; padding: 14px 40px; display: flex; justify-content: space-between; align-items: center; }
     .navbar a { color: white; text-decoration: none; font-weight: bold; }
     
+    /* მთავარი კონტეინერი */
     .container { max-width: 950px; margin: 30px auto; padding: 0 20px; }
+    
+    /* პროდუქტის ბარათი კალათაში */
     .cart-card { background: white; border-radius: 8px; padding: 20px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
     .cart-card img { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; }
     .item-info { flex: 1; margin-left: 20px; }
     .item-info h4 { font-size: 16px; margin-bottom: 5px; }
     .item-info p { font-size: 13px; color: #6c757d; margin-bottom: 3px; }
     
+    /* რაოდენობის მართვის ღილაკები (+ და -) */
     .qty-controls { display: flex; align-items: center; gap: 10px; }
     .qty-btn { background: #e9ecef; border: none; width: 30px; height: 30px; border-radius: 4px; font-weight: bold; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; color: black; }
+    
+    /* წაშლის წითელი ღილაკი */
     .btn-delete { background: #dc3545; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: bold; }
 
+    /* ჯამური თანხის ბლოკი */
     .summary-box { background: white; padding: 25px; border-radius: 8px; text-align: right; margin-top: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
     .total-price { font-size: 22px; color: #28a745; font-weight: bold; }
   </style>
 </head>
 <body>
 
+  <!-- ზედა ნავიგაციის ზოლი (Header) -->
   <header class="navbar">
     <a href="/" class="logo">🛍️ Online Shop</a>
     <a href="/">← მაღაზიაში დაბრუნება</a>
@@ -34,34 +46,46 @@
   <div class="container">
     <h2 style="margin-bottom: 20px;">🛒 თქვენი კალათა</h2>
 
+    <!-- ციკლით გადავუყვებით კალათაში მყოფ თითოეულ ნივთს -->
     {% for item in items %}
       <div class="cart-card">
+        
+        <!-- ვამოწმებთ, აქვს თუ არა პროდუქტს ფოტო ბაზაში -->
         {% if item.product.image %}
           <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
         {% endif %}
 
+        <!-- პროდუქტის ძირითადი ინფორმაცია -->
         <div class="item-info">
           <h4>{{ item.product.title }}</h4>
           <p>ფასი: <strong>${{ item.product.price }}</strong> | რეიტინგი: ⭐ {{ item.product.rating }}</p>
           <p>საწყობშია: {{ item.product.stock }} ცალი | რევიუები: {{ item.reviews_count }}</p>
         </div>
 
-        <!-- რაოდენობის მომატება / დაკლება -->
+        <!-- რაოდენობის მართვის ღილაკები (+ და -) -->
         <div class="qty-controls">
+          <!-- რაოდენობის დაკლება 1-ით -->
           <a href="{% url 'update_cart' item.product.pk 'minus' %}" class="qty-btn">-</a>
+          
+          <!-- მიმდინარე რაოდენობა -->
           <span style="font-weight: bold; font-size: 16px;">{{ item.quantity }}</span>
+          
+          <!-- რაოდენობის მომატება 1-ით -->
           <a href="{% url 'update_cart' item.product.pk 'plus' %}" class="qty-btn">+</a>
         </div>
 
+        <!-- ამ კონკრეტული ნივთის ჯამური ფასი -->
         <div style="font-weight: bold; font-size: 17px; width: 90px; text-align: right;">
           ${{ item.item_total }}
         </div>
 
-        <!-- წაშლა -->
+        <!-- კალათიდან ნივთის სრული წაშლა -->
         <div style="margin-left: 20px;">
           <a href="{% url 'update_cart' item.product.pk 'delete' %}" class="btn-delete">წაშლა</a>
         </div>
       </div>
+
+    <!-- თუ კალათა ცარიელია, გამოვა ეს შეტყობინება -->
     {% empty %}
       <div style="background: white; padding: 40px; text-align: center; border-radius: 8px;">
         <h3>კალათა ცარიელია!</h3>
@@ -69,6 +93,7 @@
       </div>
     {% endfor %}
 
+    <!-- ჯამური თანხის ჩვენება, თუ კალათაში ნივთები არის -->
     {% if items %}
       <div class="summary-box">
         <div>ჯამური თანხა: <span class="total-price">${{ total_price }}</span></div>
