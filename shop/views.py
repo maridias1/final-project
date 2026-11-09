@@ -189,9 +189,10 @@ def user_register(request):
         if form.is_valid(): # თუ პაროლი და იუზერნეიმი ვალიდურია:
             user = form.save()   # მომხმარებელი ინახება auth_user ბაზაში
             login(request, user) # მომხმარებლის სისტემაში შესვლა და მისი ავტორიზებული სესიის შექმნა
-            return redirect('product_list')
+        request.session['cart'] = {}  # ახალ იუზერს კალათას უსუფთავებს 0-მდე!
+            
+        return redirect('product_list')
     else:
-        # თუ ჩვეულებრივი GET მოთხოვნაა, ვხსნით ცარიელ ფორმას
         form = UserCreationForm()
         
     return render(request, 'register.html', {'form': form})
