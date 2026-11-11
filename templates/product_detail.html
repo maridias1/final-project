@@ -137,7 +137,7 @@
         
         <label>სახელი და გვარი:</label>
         <!-- თუ მომხმარებელი ავტორიზებულია, მისი სახელი ავტომატურად იწერება ველში -->
-        <input type="text" name="name" required placeholder="მაგ: გიორგი ბერიძე" value="{% if user.is_authenticated %}{{ user.username }}{% endif %}">
+        <input type="text" name="name" required placeholder="მაგ: მარიკა დიასამიძე" value="{% if user.is_authenticated %}{{ user.username }}{% endif %}">
         
         <label>რეიტინგი:</label>
         <select name="rating">
