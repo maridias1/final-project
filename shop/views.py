@@ -10,7 +10,7 @@ from django.contrib.auth import login, logout
 # Django-ს ჩაშენებული მზა ფორმები რეგისტრაციისთვის (UserCreationForm) და ავტორიზაციისთვის (AuthenticationForm)
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-# ჩვენ მიერ models.py-ში შექმნილი მონაცემთა მოდელები
+# models.py-ში შექმნილი მონაცემთა მოდელები
 from .models import Product, Review
 
 
