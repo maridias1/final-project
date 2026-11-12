@@ -12,7 +12,7 @@ def main():
     """ადმინისტრაციული დავალებებისა და ბრძანებების გამშვები მთავარი ფუნქცია."""
 
     # გარემოს ცვლადებში უთითებს, სად მდებარეობს პროექტის მთავარი პარამეტრების ფაილი (settings.py).
-    # შენს პროექტში ეს არის conf/settings.py
+    # პროექტში ეს არის conf/settings.py
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'conf.settings')
 
     try:

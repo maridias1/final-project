@@ -50,7 +50,7 @@
     {% for item in items %}
       <div class="cart-card">
         
-        <!-- ვამოწმებთ, აქვს თუ არა პროდუქტს ფოტო ბაზაში -->
+        <!-- ვამოწმებთ, აქვს თუ არა პროდუქტს ფოტო ბაზაში რომ უსურათო პროდუქტზე გაფუჭებული იკონკა არ გამოჩნდეს და შეცდომა არ ამოაგდოს-->
         {% if item.product.image %}
           <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
         {% endif %}
