@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>რეგისტრაცია</title>
+  <title>Register</title>
   
   <style>
-    /* body-ზე გამოყენებულია Flexbox, რათა რეგისტრაციის ბლოკი (.box) 
-       ეკრანის ზუსტად ცენტრში მოექცეს (როგორც ვერტიკალურად, ისე ჰორიზონტალურად) */
     body { 
       font-family: sans-serif; 
       background: #f8f9fa; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      height: 100vh; /* ეკრანის 100% სიმაღლე */
+      height: 100vh; /* 100% of viewport height */
       margin: 0; 
     }
-    
-    /* თეთრი ბარათის (კონტეინერის) სტილები ჩრდილით (box-shadow) */
+
     .box { 
       background: white; 
       padding: 30px; 
@@ -27,8 +24,6 @@
     }
     
     h2 { margin-bottom: 20px; text-align: center; }
-    
-    /* ინპუტების (მომხმარებლის სახელი, პაროლი, პაროლის გამეორება) სტილები */
     input { 
       width: 100%; 
       padding: 9px; 
@@ -38,7 +33,6 @@
       box-sizing: border-box; 
     }
     
-    /* მწვანე ღილაკი რეგისტრაციისთვის */
     button { 
       width: 100%; 
       background: #28a745; 
@@ -55,29 +49,16 @@
 </head>
 <body>
 
-  <!-- მთავარი სარეგისტრაციო ბარათი -->
   <div class="box">
-    <h2>📝 რეგისტრაცია</h2>
-    
-    <!-- POST მეთოდით ფორმის გაგზავნა views.py-ში არსებულ user_register ფუნქციასთან -->
+    <h2>📝 Register</h2>
     <form method="POST">
-      
-      <!-- CSRF Token (ძალიან მნიშვნელოვანი უსაფრთხოების ტეგი!): 
-           იცავს საიტს Cross-Site Request Forgery ჰაკერული შეტევებისგან.
-           მის გარეშე Django არ მიიღებს POST მონაცემებს და დააბრუნებს 404 შეცდომას -->
       {% csrf_token %}
-      
-      <!-- {{ form.as_p }}: Django-ს ჩაშენებული UserCreationForm-ის ველები 
-           (იუზერნეიმი, პაროლი და პაროლის დადასტურება) ავტომატურად გამოაქვს 
-           HTML პარაგრაფებად (<p>) დალაგებული, ვალიდაციის წესებთან ერთად -->
       {{ form.as_p }}
-      
-      <!-- რეგისტრაციის დადასტურების ღილაკი -->
-      <button type="submit">რეგისტრაცია</button>
+      <button type="submit">Register</button>
     </form>
     
-    <!-- ბმული სისტემაში შესვლის (Login-ის) გვერდზე გადასასვლელად ({% url 'login' %}) -->
-    <p>უკვე გაქვთ ანგარიში? <a href="{% url 'login' %}">შედით</a></p>
+    <!-- Link to navigate to the login page ({% url 'login' %}) -->
+    <p>Already have an account? <a href="{% url 'login' %}">Log in</a></p>
   </div>
 
 </body>

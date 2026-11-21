@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Online Shop</title>
   
   <style>
-    /* გლობალური სტილები */
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: #f8f9fa; color: #333; }
 
-    /* ჰედერის სტილები (მუქი ფონი, Flexbox განლაგება) */
     .navbar {
       background-color: #212529;
       color: white;
@@ -30,7 +28,7 @@
       align-items: center;
       gap: 15px;
     }
-    /* კალათის ღილაკი ჰედერში */
+
     .cart-btn {
       background: #343a40;
       border: 1px solid #495057;
@@ -45,7 +43,7 @@
       font-size: 14px;
       color: #f8f9fa;
     }
-    /* ავტორიზაციის ღილაკების საერთო სტილი */
+
     .btn-auth {
       padding: 7px 14px;
       border-radius: 6px;
@@ -53,11 +51,10 @@
       font-size: 14px;
       font-weight: 500;
     }
-    .btn-login { background-color: #007bff; color: white; }     /* ლურჯი - შესვლა */
-    .btn-register { background-color: #28a745; color: white; }  /* მწვანე - რეგისტრაცია */
-    .btn-logout { background-color: #dc3545; color: white; }    /* წითელი - გასვლა */
+    .btn-login { background-color: #007bff; color: white; }    
+    .btn-register { background-color: #28a745; color: white; } 
+    .btn-logout { background-color: #dc3545; color: white; }    
 
-    /* ძებნის სექცია */
     .search-section {
       max-width: 900px;
       margin: 25px auto;
@@ -87,7 +84,6 @@
       font-weight: bold;
     }
 
-    /* მთავარი განლაგება (Layout) - საიდბარი მარცხნივ, პროდუქტები მარჯვნივ */
     .main-layout {
       max-width: 1200px;
       margin: 0 auto;
@@ -95,7 +91,7 @@
       gap: 30px;
       padding: 0 20px 40px;
     }
-    /* მარცხენა ფილტრაციის პანელი (Sidebar) */
+
     .sidebar {
       width: 250px;
       background: white;
@@ -150,17 +146,14 @@
       font-size: 14px;
     }
 
-    /* პროდუქტების ბადე (CSS Grid) - რესპონსიული განლაგება */
     .products-container {
       flex: 1;
     }
     .products-grid {
       display: grid;
-      /* repeat(auto-fill, minmax(240px, 1fr)) - ეკრანის ზომის მიხედვით ავტომატურად ანაწილებს სვეტებს */
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
       gap: 22px;
     }
-    /* ცალკეული პროდუქტის ბარათი (Card) */
     .product-card {
       background: white;
       border-radius: 8px;
@@ -171,7 +164,7 @@
       justify-content: space-between;
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    /* ჰოვერ ეფექტი - მაუსის მიტანისას ბარათი ოდნავ ზემოთ იწევს */
+  
     .product-card:hover {
       transform: translateY(-3px);
       box-shadow: 0 6px 14px rgba(0,0,0,0.08);
@@ -217,109 +210,77 @@
 </head>
 <body>
 
-  <!-- ==============================================================================
-       1. ჰედერი (ნავიგაცია, კალათა და ავთენტიფიკაციის სტატუსი)
-       ============================================================================== -->
   <header class="navbar">
     <a href="/" class="logo">🛍️ Online Shop</a>
 
     <div class="navbar-right">
-      <!-- კალათის ღილაკი დინამიკური რაოდენობით, რომელიც views.py-დან მოდის -->
-      <a href="{% url 'cart' %}" class="cart-btn">🛒 კალათა ({{ cart_count }})</a>
-
-      <!-- მომხმარებლის სტატუსის შემოწმება: -->
+      <a href="{% url 'cart' %}" class="cart-btn">🛒 Cart ({{ cart_count }})</a>
       {% if user.is_authenticated %}
-        <!-- თუ ავტორიზებულია: გამოვა მისალმება და გამოსვლის (Logout) ღილაკი -->
-        <span class="user-greeting">👤 გამარჯობა, <strong>{{ user.username }}</strong></span>
-        <a href="{% url 'logout' %}" class="btn-auth btn-logout">გასვლა</a>
+        <span class="user-greeting">👤 Hello, <strong>{{ user.username }}</strong></span>
+        <a href="{% url 'logout' %}" class="btn-auth btn-logout">Logout</a>
       {% else %}
-        <!-- თუ სტუმარია: გამოვა შესვლა და რეგისტრაცია -->
-        <a href="{% url 'login' %}" class="btn-auth btn-login">შესვლა</a>
-        <a href="{% url 'register' %}" class="btn-auth btn-register">რეგისტრაცია</a>
+        <a href="{% url 'login' %}" class="btn-auth btn-login">Login</a>
+        <a href="{% url 'register' %}" class="btn-auth btn-register">Register</a>
       {% endif %}
     </div>
   </header>
 
-  <!-- ==============================================================================
-       2. ძებნის ველი (GET მოთხოვნა, საძიებო პარამეტრი: name="q")
-       ============================================================================== -->
   <div class="search-section">
-    <!-- method="GET" იმიტომ, რომ საძიებო სიტყვა აისახოს URL-ში (მაგ: /?q=hoodie) -->
     <form method="GET" action="/" class="search-form">
-      <!-- value="{{ query }}" უზრუნველყოფს, რომ ძებნის შემდეგ ჩაწერილი სიტყვა ველში დარჩეს -->
-      <input type="text" name="q" value="{{ query }}" class="search-input" placeholder="მოძებნე ნივთი სახელწოდებით...">
-      <button type="submit" class="search-btn">🔍 ძებნა</button>
+      <input type="text" name="q" value="{{ query }}" class="search-input" placeholder="Search item by title...">
+      <button type="submit" class="search-btn">🔍 Search</button>
     </form>
   </div>
 
-  <!-- ==============================================================================
-       3. მთავარი სივრცე (საიდბარი და პროდუქტების კატალოგი)
-       ============================================================================== -->
   <div class="main-layout">
-    
-    <!-- მარცხენა მხარე: ფილტრაციის პანელი -->
+
     <aside class="sidebar">
-      <h4>▼ ფილტრაცია</h4>
+      <h4>▼ Filters</h4>
       <form method="GET" action="/">
         
-        <!-- 3.1 კატეგორიის ჩამოსაშლელი სია -->
         <div class="filter-item">
-          <label>კატეგორია</label>
+          <label>Category</label>
           <select name="category">
-            <option value="all">ყველა კატეგორია</option>
-            <!-- views.py-დან წამოღებული უნიკალური კატეგორიების ციკლი -->
+            <option value="all">All Categories</option>
             {% for cat in categories %}
-              <!-- selected ამოწმებს, თუ ეს კატეგორია უკვე არჩეული იყო, შერჩეული დარჩეს -->
               <option value="{{ cat }}" {% if selected_category == cat %}selected{% endif %}>{{ cat }}</option>
             {% endfor %}
           </select>
         </div>
 
-        <!-- 3.2 რეიტინგის ჩამოსაშლელი სია -->
         <div class="filter-item">
-          <label>მინიმალური რეიტინგი</label>
+          <label>Minimum Rating</label>
           <select name="rating">
-            <option value="all">ნებისმიერი</option>
-            <option value="4" {% if selected_rating == '4' %}selected{% endif %}>⭐ 4 და მეტი</option>
-            <option value="4.5" {% if selected_rating == '4.5' %}selected{% endif %}>⭐ 4.5 და მეტი</option>
+            <option value="all">Any</option>
+            <option value="4" {% if selected_rating == '4' %}selected{% endif %}>⭐ 4 and above</option>
+            <option value="4.5" {% if selected_rating == '4.5' %}selected{% endif %}>⭐ 4.5 and above</option>
             <option value="5" {% if selected_rating == '5' %}selected{% endif %}>⭐ 5.0</option>
           </select>
         </div>
 
-        <!-- ფილტრის გააქტიურება -->
-        <button type="submit" class="filter-btn">გაფილტვრა</button>
-        <!-- ფილტრის გასუფთავება (უბრალოდ აბრუნებს მთავარ / მისამართზე) -->
-        <a href="/" class="reset-btn">გასუფთავება</a>
+        <button type="submit" class="filter-btn">Filter</button>
+        <a href="/" class="reset-btn">Reset</a>
       </form>
     </aside>
 
-    <!-- მარჯვენა მხარე: პროდუქტების ბადე -->
     <section class="products-container">
       <div class="products-grid">
-        <!-- გადავუყვებით გაფილტრულ ან სრულ პროდუქტების სიას -->
         {% for product in products %}
           <div class="product-card">
-            <!-- თუ სურათი ატვირთულია, ვაჩვენებთ მას; თუ არა - დროებით შემცვლელ ფოტოს (Placeholder) -->
             {% if product.image %}
               <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-img">
             {% else %}
               <img src="https://placehold.co/220x220?text=No+Photo" class="product-img">
             {% endif %}
 
-            <!-- პროდუქტის სათაურზე დაჭერით გადავდივართ მის დეტალურ გვერდზე ({% url 'product_detail' product.pk %}) -->
             <a href="{% url 'product_detail' product.pk %}" class="product-title" style="text-decoration: none; display: block;">{{ product.title }}</a>
-            
             <div class="product-rating">⭐ {{ product.rating }}</div>
             <div class="product-price">${{ product.price }}</div>
-            
-            <!-- პირდაპირ მთავარი გვერდიდან კალათაში დამატების ღილაკი -->
-            <a href="{% url 'add_to_cart' product.pk %}" class="add-cart-btn" style="text-decoration: none;">🛒 კალათაში დამატება</a>
+            <a href="{% url 'add_to_cart' product.pk %}" class="add-cart-btn" style="text-decoration: none;">🛒 Add to Cart</a>
           </div>
-
-        <!-- თუ ძებნის ან ფილტრაციის შედეგად არცერთი პროდუქტი არ მოიძებნა -->
-{% empty %}
+        {% empty %}
           <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888;">
-            პროდუქტი ვერ მოიძებნა.
+            No products found.
           </p>
         {% endfor %}
       </div>

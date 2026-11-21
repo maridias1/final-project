@@ -1,19 +1,5 @@
-# Django-ს ჩაშენებული ადმინისტრაციული პანელის (Admin Interface) მოდულის შემოტანა
 from django.contrib import admin
-
-# შემოგვაქვს ჩვენ მიერ models.py-ში შექმნილი Product მოდელი
 from .models import Product
-
-
-# ==============================================================================
-# პროდუქტის რეგისტრაცია და ვიზუალის მორგება Django-ს ადმინ-პანელში (/admin/)
-# ==============================================================================
-
-# @admin.register(Product) არის დეკორატორი (Decorator), რომელიც Product მოდელს 
-# პირდაპირ აკავშირებს ქვემოთ მოცემულ ProductAdmin კონფიგურაციის კლასთან
-@admin.register(Product) #Product მოდელს არეგისტრირებს Django-ს ადმინ-პანელში
+@admin.register(Product) 
 class ProductAdmin(admin.ModelAdmin):
-    # list_display განსაზღვრავს, რომელი სვეტები გამოჩნდეს პროდუქტების საერთო ცხრილში
-    # ამ პარამეტრის გარეშე გამოჩნდებოდა მხოლოდ პროდუქტის სახელი (__str__),
-    # ახლა კი ადმინს ერთიან ცხრილში უჩანს: სათაური, ფასი, ბრენდი, მარაგი და რეიტინგი
-    list_display = ('title', 'price', 'brand', 'stock', 'rating') 
+   list_display = ('title', 'price', 'brand', 'stock', 'rating') 

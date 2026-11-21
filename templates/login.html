@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html lang="ka">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>შესვლა</title>
+  <title>Login</title>
   
   <style>
-    /* body-ზე გამოყენებულია Flexbox, რათა ავტორიზაციის ბლოკი (.box) 
-       ეკრანის ზუსტად ცენტრში მოექცეს (როგორც ვერტიკალურად, ისე ჰორიზონტალურად) */
     body { 
       font-family: sans-serif; 
       background: #f8f9fa; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
-      height: 100vh; /* ეკრანის მთლიანი სიმაღლე */
+      height: 100vh; /* Full viewport height */
       margin: 0; 
     }
-    
-    /* თეთრი ბარათის (კონტეინერის) სტილები ჩრდილით (box-shadow) */
+ 
     .box { 
       background: white; 
       padding: 30px; 
@@ -27,8 +24,7 @@
     }
     
     h2 { margin-bottom: 20px; text-align: center; }
-    
-    /* ფორმის ველების (ინპუტების) სტილები */
+
     input { 
       width: 100%; 
       padding: 10px; 
@@ -37,8 +33,7 @@
       border-radius: 5px; 
       box-sizing: border-box; 
     }
-    
-    /* ლურჯი ღილაკი შესვლისთვის */
+
     button { 
       width: 100%; 
       background: #007bff; 
@@ -55,28 +50,15 @@
 </head>
 <body>
 
-  <!-- მთავარი ბარათი -->
   <div class="box">
-    <h2>🔑 შესვლა</h2>
-    
-    <!-- POST მეთოდით ფორმის გაგზავნა views.py-ში არსებულ user_login ფუნქციასთან -->
+    <h2>🔑 Login</h2>
     <form method="POST">
-      
-      <!-- CSRF Token (ძალიან მნიშვნელოვანი უსაფრთხოების ტეგი!): 
-           იცავს საიტს Cross-Site Request Forgery ჰაკერული შეტევებისგან.
-           Django არ მიიღებს POST მონაცემს ამ ტოკენის გარეშე -->
       {% csrf_token %}
-      
-      <!-- {{ form.as_p }}: Django-ს ჩაშენებული AuthenticationForm-ის ველები 
-           (იუზერნეიმი და პაროლი) ავტომატურად გამოაქვს HTML პარაგრაფებად (<p>) დალაგებული -->
       {{ form.as_p }}
-      
-      <!-- ფორმის გაგზავნის ღილაკი -->
-      <button type="submit">შესვლა</button>
+      <button type="submit">Login</button>
     </form>
-    
-    <!-- ბმული რეგისტრაციის გვერდზე გადასასვლელად ({% url 'register' %}) -->
-    <p>არ გაქვთ ანგარიში? <a href="{% url 'register' %}">დარეგისტრირდით</a></p>
+
+    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
   </div>
 
 </body>
