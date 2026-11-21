@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ product.title }} - Details</title>
-  
+
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
     body { background-color: #f8f9fa; color: #333; }
@@ -18,14 +18,79 @@
     .top-section { display: flex; gap: 40px; margin-bottom: 30px; }
     .img-box { flex: 1; text-align: center; }
     .img-box img { max-width: 100%; max-height: 380px; object-fit: contain; border-radius: 8px; }
-    
+
     .info-box { flex: 1.2; display: flex; flex-direction: column; justify-content: center; }
     .info-box h1 { font-size: 24px; margin-bottom: 12px; }
     .row { margin-bottom: 10px; font-size: 15px; color: #555; }
     .price { font-size: 26px; font-weight: bold; color: #28a745; margin: 15px 0; }
-    
+
     .actions { display: flex; gap: 15px; margin-top: 15px; }
     .btn-add { background: #212529; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; }
     .btn-rate { background: #ffc107; color: #212529; padding: 12px 24px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer; }
 
     .tabs-header { display: flex; border-bottom: 2px solid #dee2e6; margin-top: 30px; }
+    .tab-btn { padding: 12px 24px; background: none; border: none; font-size: 15px; font-weight: 600; color: #6c757d; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+    .tab-btn.active { color: #212529; border-bottom-color: #212529; }
+    .tab-content { padding: 20px 0; font-size: 15px; line-height: 1.6; color: #444; display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="{% url 'product_list' %}">Online Shop</a>
+    <a href="{% url 'cart' %}" class="cart-btn">Cart</a>
+  </div>
+
+  <div class="container">
+    <a href="{% url 'product_list' %}" class="back-link">&larr; Back to Products</a>
+
+    <div class="top-section">
+      <div class="img-box">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" alt="{{ product.title }}">
+        {% endif %}
+      </div>
+
+      <div class="info-box">
+        <h1>{{ product.title }}</h1>
+        <div class="row">Category: <strong>{{ product.category }}</strong></div>
+        <div class="row">Rating: <strong>{{ product.rating|default:"0" }} / 5</strong></div>
+        <div class="price">${{ product.price }}</div>
+
+        <div class="actions">
+          <a href="{% url 'add_to_cart' product.id %}" class="btn-add">Add to Cart</a>
+          <button type="button" class="btn-rate" onclick="openTab(event, 'reviews')">Rate Product</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs-header">
+      <button class="tab-btn active" onclick="openTab(event, 'description')">Description</button>
+      <button class="tab-btn" onclick="openTab(event, 'reviews')">Reviews</button>
+    </div>
+
+    <div id="description" class="tab-content active">
+      <p>{{ product.description }}</p>
+    </div>
+
+    <div id="reviews" class="tab-content">
+      <p>Customer reviews and ratings will appear here.</p>
+    </div>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      const contents = document.querySelectorAll('.tab-content');
+      const buttons = document.querySelectorAll('.tab-btn');
+
+      contents.forEach(c => c.classList.remove('active'));
+      buttons.forEach(b => b.classList.remove('active'));
+
+      document.getElementById(tabName).classList.add('active');
+      evt.currentTarget.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
